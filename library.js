@@ -10,6 +10,11 @@ function Book(title, author, pages, hasRead) {
         let readStatus = this.hasRead ? "read" : "not read yet";
         return `${this.title} by ${this.author}, ${this.pages} pages, ${readStatus}`;
     };
+
+    // Add a method to the Book prototype to toggle the read status
+    Book.prototype.toggleReadStatus = function() {
+        this.hasRead = !this.hasRead; // Toggles true to false, and false to true
+    };
 }
 
 // Example of creating a book object
@@ -51,6 +56,7 @@ function displayBooks() {
         <p>Author: ${book.author}</p>
         <p>Pages: ${book.pages}</p>
         <p>Read: ${book.hasRead ? "Read" : "Not read yet"}</p>
+        <button class="toggle-read-btn" data-index="${index}">Toggle Read</button>
         <button class="remove-btn" data-index="${index}">Remove</button>`; // Add remove button with data-index
 
         // Add event listener to the remove button
@@ -58,6 +64,14 @@ function displayBooks() {
         removeButton.addEventListener('click', () => {
             const bookIndex = parseInt(removeButton.getAttribute('data-index')); // Get the index from the data attribute
             removeBookFromLibrary(bookIndex); // Call the remove function
+        });
+
+        // Add event listener to the toggle read button
+        const toggleReadButton = bookCard.querySelector('.toggle-read-btn');
+        toggleReadButton.addEventListener('click', () => {
+            const bookIndex = parseInt(toggleReadButton.getAttribute('data-index'));
+            myLibrary[bookIndex].toggleReadStatus(); // Toggle the read status of the book
+            displayBooks(); // Refresh the book display
         });
 
         libraryContainer.appendChild(bookCard);
