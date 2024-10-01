@@ -23,6 +23,11 @@ function addBookToLibrary(title, author, pages, hasRead) {
   myLibrary.push(newBook);
 }
 
+function removeBookFromLibrary(index) {
+    myLibrary.splice(index, 1); // Remove the book at the given index
+    displayBooks(); // Refresh the display
+}
+
 addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, false);
 addBookToLibrary("1984", "George Orwell", 328, true);
 
@@ -36,7 +41,7 @@ function displayBooks() {
     libraryContainer.innerHTML = '';
 
     // Loop through each book and create HTML to display it
-    myLibrary.forEach((book) => {
+    myLibrary.forEach((book, index) => {
         // Create a div for each book
         const bookCard = document.createElement("div");
         bookCard.classList.add("book-card");
@@ -45,7 +50,15 @@ function displayBooks() {
         <h2>${book.title}</h2>
         <p>Author: ${book.author}</p>
         <p>Pages: ${book.pages}</p>
-        <p>Read: ${book.hasRead ? "Read" : "Not read yet"}</p>`;
+        <p>Read: ${book.hasRead ? "Read" : "Not read yet"}</p>
+        <button class="remove-btn" data-index="${index}">Remove</button>`; // Add remove button with data-index
+
+        // Add event listener to the remove button
+        const removeButton = bookCard.querySelector('.remove-btn');
+        removeButton.addEventListener('click', () => {
+            const bookIndex = parseInt(removeButton.getAttribute('data-index')); // Get the index from the data attribute
+            removeBookFromLibrary(bookIndex); // Call the remove function
+        });
 
         libraryContainer.appendChild(bookCard);
     });
